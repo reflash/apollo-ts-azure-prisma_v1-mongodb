@@ -32,7 +32,7 @@ yarn start
 ## Deploy to Azure
 
 ```bash
-yarn publish
+yarn deploy
 ```
 
 ## NOTE
