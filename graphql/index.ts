@@ -1,19 +1,23 @@
 import { ApolloServer, gql } from "apollo-server-azure-functions"
+import { prisma } from '../generated/prisma-client'
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
+const rootTypeDefs = gql`
+  type User {
+    id: ID!
+    name: String!
+  }
+  
   type Query {
-    hello: String
+    users: [User!]!
   }
 `;
 
-// Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
+    users: async (parent, args, context, info) => await prisma.users(args),
   },
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs: rootTypeDefs, resolvers });
 
 export default server.createHandler();
